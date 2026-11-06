@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Multiple-choice knowledge check</title>
+		<style id="quiz-startup-styles">
+			/* Inlined in the head so authoring content stays hidden before any asset loads. */
+			.quiz-page
+				:is(
+					.quiz-editor-guide,
+					.quiz-edit-instructions,
+					[data-quiz-global-instructions],
+					#quiz-authoring-source,
+					.quiz-authoring-source,
+					[data-quiz-source]
+				) {
+				display: none;
+			}
+			.quiz-loading {
+				display: grid;
+				place-items: center;
+				min-height: 180px;
+				padding: 24px;
+				color: #202122;
+				font:
+					19px/1.5 Lato,
+					Arial,
+					sans-serif;
+				text-align: center;
+			}
+			.quiz-loading-progress,
+			.quiz-loading-error {
+				grid-area: 1 / 1;
+			}
+			.quiz-loading-progress {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				animation: quiz-loading-timeout 0s 15s forwards;
+			}
+			.quiz-loading-spinner {
+				display: inline-block;
+				box-sizing: border-box;
+				width: 32px;
+				height: 32px;
+				flex-shrink: 0;
+				border: 3px solid #e3e9f1;
+				border-top-color: #006fbf;
+				border-radius: 50%;
+				animation: quiz-loading-spin 0.8s linear infinite;
+			}
+			.quiz-loading-error {
+				visibility: hidden;
+				margin: 0;
+				max-width: 38em;
+				animation: quiz-loading-failed 0s 15s forwards;
+			}
+			.quiz-page:has(#quiz-learner-root[data-quiz-ready]) .quiz-loading {
+				display: none;
+			}
+			/* Brightspace's editable body reveals the source without executing scripts.
+   :read-write also covers browsers editing with document.designMode. */
+			:is(html, body):is(
+					[contenteditable="true"],
+					[contenteditable=""],
+					.mce-content-body,
+					:read-write
+				)
+				.quiz-page
+				:is(
+					.quiz-editor-guide,
+					.quiz-edit-instructions,
+					[data-quiz-global-instructions],
+					#quiz-authoring-source,
+					.quiz-authoring-source,
+					[data-quiz-source]
+				) {
+				display: block !important;
+			}
+			:is(html, body):is(
+					[contenteditable="true"],
+					[contenteditable=""],
+					.mce-content-body,
+					:read-write
+				)
+				.quiz-page
+				:is(.quiz-loading, #quiz-learner-root) {
+				display: none !important;
+			}
+			@keyframes quiz-loading-spin {
+				to {
+					transform: rotate(360deg);
+				}
+			}
+			@keyframes quiz-loading-timeout {
+				to {
+					visibility: hidden;
+				}
+			}
+			@keyframes quiz-loading-failed {
+				to {
+					visibility: visible;
+				}
+			}
+			@media (prefers-reduced-motion: reduce) {
+				.quiz-loading-spinner {
+					animation: none;
+				}
+			}
+		</style>
+		<link rel="stylesheet" href="./src/styles/quiz.css" />
+		<script type="module" src="./src/adapters/registerBrightspace.ts"></script>
+		<link
+			rel="stylesheet"
+			href="https://templates.lcs.brightspace.com/lib/assets/css/styles.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="/d2l/le/contentstyler/6606/files/View"
+			data-override="override"
+		/>
+	</head>
+	<body>
+		<main class="quiz-page">
+			<h1 data-quiz-heading="">Multiple-choice knowledge check</h1>
+			<div class="quiz-loading" role="status" aria-live="polite">
+				<div class="quiz-loading-progress">
+					<span class="quiz-loading-spinner" aria-hidden="true"></span
+					><span>Loading activity…</span>
+				</div>
+				<p class="quiz-loading-error">
+					The activity could not load. Refresh this page. If the problem
+					continues, contact the course owner.
+				</p>
+			</div>
+			<div class="quiz-editor-guide">
+				<p><strong>Add a question — one row at a time</strong></p>
+				<ol>
+					<li>
+						Use the empty row below, or click inside a question and choose
+						<strong>Table → Row → Insert row after</strong> (sometimes labelled
+						<strong>Insert row below</strong>).
+					</li>
+					<li>
+						Fill the four cells. In <strong>Answers</strong>, press
+						<strong>Enter</strong> between choices and type
+						<strong>[CORRECT]</strong> before exactly one answer.
+					</li>
+					<li>
+						Click <strong>Save and Close</strong> to update the carousel. Repeat
+						row insertion whenever you need another question; there is no fixed
+						question count.
+					</li>
+				</ol>
+				<p>
+					<strong>Field tips:</strong> Use <strong>Heading 2</strong> for the
+					question. Instructions are optional. Include at least two answers and
+					feedback. Entirely empty rows are ignored; finish or delete partly
+					completed rows.
+				</p>
+				<p>
+					<strong>Remove a question:</strong> Click in its row and choose
+					<strong>Table → Row → Delete row</strong>. Keep the four column
+					headings and at least one complete question. Do not merge cells or add
+					columns. Use fullscreen for more room.
+				</p>
+				<p>
+					If this table remains visible in the saved learner topic, ask the
+					course owner to check that the quiz assets loaded.
+				</p>
+			</div>
+			<div class="quiz-edit-instructions" data-quiz-global-instructions="">
+				<p>Complete each question, then select Check to review your answer.</p>
+				<p>Use Previous and Next to move between questions.</p>
+			</div>
+			<div
+				id="quiz-authoring-source"
+				class="quiz-authoring-source"
+				data-quiz-source=""
+			>
+				<table class="quiz-question-table">
+					<caption>
+						Question bank — one row per question
+					</caption>
+					<colgroup>
+						<col style="width: 27%" />
+						<col style="width: 18%" />
+						<col style="width: 29%" />
+						<col style="width: 26%" />
+					</colgroup>
+					<thead>
+						<tr>
+							<th scope="col">Question</th>
+							<th scope="col">Instructions</th>
+							<th scope="col">Answers</th>
+							<th scope="col">Feedback</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<h2 data-quiz-prompt="">
+									Which action makes a link’s purpose easier to understand?
+								</h2>
+							</td>
+							<td>
+								<p>Choose one answer, then select Check.</p>
+							</td>
+							<td>
+								<p>Use “click here” for every link.</p>
+								<p>
+									<strong>[CORRECT]</strong> Use descriptive link text that
+									explains the destination.
+								</p>
+								<p>Remove the link’s visible underline.</p>
+								<p>Use colour as the only indication that text is a link.</p>
+							</td>
+							<td>
+								<p>
+									Descriptive link text helps readers understand where a link
+									leads. For example,
+									<em>Read the accessibility guide</em> communicates more than
+									<em>click here</em>.
+								</p>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h2 data-quiz-prompt="">
+									Which of these is an example of semantic HTML?
+								</h2>
+							</td>
+							<td>
+								<p>Choose one answer, then select Check.</p>
+							</td>
+							<td>
+								<p>
+									Use a generic container for every element regardless of its
+									meaning.
+								</p>
+								<p>
+									<strong>[CORRECT]</strong> Use a heading element to identify a
+									section heading.
+								</p>
+								<p>Use CSS classes instead of headings.</p>
+								<p>Use bold text alone to communicate document structure.</p>
+							</td>
+							<td>
+								<p>
+									Semantic elements describe the role of content. A heading
+									element conveys document structure to browsers and assistive
+									technologies.
+								</p>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h2></h2>
+							</td>
+							<td>
+								<p></p>
+							</td>
+							<td>
+								<p></p>
+							</td>
+							<td>
+								<p></p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<section
+				id="quiz-learner-root"
+				class="d2l-native-quiz"
+				aria-label="Multiple-choice carousel"
+			></section>
+		</main>
+		<script type="module" src="./src/main.ts"></script>
+	</body>
+</html>
