@@ -117,7 +117,9 @@ export function installDocxEditor(doc: Document = document): () => void {
       const table = source.querySelector("table");
       if (!table) return;
       try {
-        await doc.defaultView?.navigator.clipboard.writeText(table.outerHTML);
+        const clipboard = doc.defaultView?.navigator.clipboard;
+        if (!clipboard) throw new Error("Clipboard unavailable");
+        await clipboard.writeText(table.outerHTML);
         status.textContent =
           "Question table HTML copied. Paste it into the quiz source HTML to persist locally.";
       } catch {
