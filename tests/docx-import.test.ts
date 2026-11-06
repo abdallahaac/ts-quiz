@@ -50,9 +50,18 @@ function storedDocx(content: string): File {
   e.setUint16(10, 1, true);
   e.setUint32(12, central.length, true);
   e.setUint32(16, local.length, true);
-  return new File([local, central, end], "questions.docx", {
+  const bytes = new Uint8Array(local.length + central.length + end.length);
+  bytes.set(local);
+  bytes.set(central, local.length);
+  bytes.set(end, local.length + central.length);
+  const file = new File([bytes], "questions.docx", {
     type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   });
+  // jsdom's File may not provide arrayBuffer even though browsers do.
+  Object.defineProperty(file, "arrayBuffer", {
+    value: async () => bytes.buffer.slice(0),
+  });
+  return file;
 }
 
 describe("Word question-table import", () => {
