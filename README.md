@@ -81,6 +81,7 @@ isolating application changes from component-library version changes.
 dist/
   index.html        editable authoring table + inlined CSS
   assets/
+    quiz.css                 standalone CSS copy for reuse
     native-quiz.js             classic IIFE; no application runtime dependencies
     brightspace-components.js compiled from @brightspace-ui/core npm imports
   fonts/                      Lato regular/bold, normal/italic
@@ -100,7 +101,11 @@ The two original Brightspace theme stylesheet links are retained. The
 when deploying elsewhere, use that course's appropriate override or remove that
 link if no override is needed. Local quiz styling and controls work without it.
 Production quiz CSS is inline so Design View and loading states work before
-JavaScript, including when the editor does not execute scripts.
+JavaScript, including when the editor does not execute scripts. The build also
+emits `dist/assets/quiz.css` for standalone reuse; this CSS is intentionally
+not loaded a second time by the HTML. Both copies include the DOCX importer
+styles, with font URLs adjusted for their respective locations. Build verification
+fails if either copy or the expected font references are missing.
 
 ## Author questions
 
