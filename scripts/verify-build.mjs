@@ -2,11 +2,12 @@ import assert from "node:assert/strict";
 import { readFile, access, readdir } from "node:fs/promises";
 import { Script } from "node:vm";
 const read = (path) => readFile(path, "utf8");
-const [html, app, components, source] = await Promise.all([
+const [html, app, components, source, stylesheet] = await Promise.all([
 	read("dist/index.html"),
 	read("dist/assets/native-quiz.js"),
 	read("dist/assets/brightspace-components.js"),
 	read("index.html"),
+	read("dist/assets/quiz.css"),
 ]);
 // Both outputs must parse as classic scripts with no runtime module imports.
 new Script(app);
@@ -29,6 +30,31 @@ assert(!html.includes("/src/") && !html.includes("/@vite/"));
 assert(!html.includes("brightspace-core-bundle.js"));
 assert(!(await readdir("dist/assets")).includes("brightspace-core-bundle.js"));
 assert(html.includes('url("./fonts/Lato-400.woff2")'));
+assert(
+  html.includes('<style data-quiz-bundled-css>'),
+  "Production HTML must embed the quiz CSS for Brightspace editor compatibility",
+);
+assert(
+  html.includes(".quiz-docx-import-tools"),
+  "Production HTML is missing DOCX importer styling",
+);
+assert(
+  stylesheet.includes(".quiz-docx-import-tools"),
+  "Standalone CSS is missing DOCX importer styling",
+);
+assert(
+  stylesheet.includes('url("../fonts/Lato-400.woff2")'),
+  "Standalone CSS must resolve fonts from the assets/ folder",
+);
+assert(
+  !stylesheet.includes("../../fonts/"),
+  "Standalone CSS contains development-only font paths",
+);
+assert(
+  !html.includes("./src/styles/quiz.css"),
+  "Production HTML must not reference the source stylesheet",
+);
+
 const authoring = (page) =>
 	page.slice(
 		page.indexOf('<div id="quiz-authoring-source"'),
@@ -52,5 +78,5 @@ await Promise.all(
 	].map((name) => access(`dist/${name}`)),
 );
 console.log(
-	"Verified classic scripts, authoring HTML, bundled npm components/languages/icons, fonts and notices.",
+	"Verified classic scripts, inlined and standalone quiz CSS, authoring HTML, bundled npm components/languages/icons, fonts and notices.",
 );
