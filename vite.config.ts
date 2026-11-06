@@ -39,7 +39,9 @@ export default defineConfig(({ mode }) => {
       license: {
         fileName: components
           ? "licenses/components.md"
-          : "licenses/application.md",
+          : importer
+            ? "licenses/importer.md"
+            : "licenses/application.md",
       },
       minify: true,
     },
