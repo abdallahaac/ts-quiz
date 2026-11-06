@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Import Word questions – Brightspace quiz</title>
+    <style>
+      :root { font-family: Lato, Arial, sans-serif; color: #202122; line-height: 1.5; }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: #fff; }
+      main { max-width: 820px; padding: 28px 20px 64px; margin: auto; }
+      h1 { font-size: 2rem; color: #1c578a; font-weight: 500; margin: 0 0 12px; }
+      h2 { font-size: 1.35rem; color: #1c578a; font-weight: 600; }
+      p { margin: 0 0 15px; }
+      a { color: #006fbf; text-decoration: underline; }
+      a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid #006fbf; outline-offset: 3px; }
+      .step { border: 1px solid #cdd5dc; border-radius: 8px; padding: 18px 20px; margin: 20px 0; }
+      .step h2 { margin: 0 0 10px; }
+      label { display: block; font-weight: 700; margin: 12px 0 8px; }
+      input[type="file"] { display: block; max-width: 100%; font: inherit; margin: 0 0 10px; }
+      button { font: 700 1rem/1.5 Lato, Arial, sans-serif; border: 1px solid #006fbf; border-radius: 6px; background: #006fbf; color: #fff; padding: 9px 16px; cursor: pointer; margin: 5px 8px 5px 0; }
+      button.secondary { background: #fff; color: #006fbf; }
+      button:disabled { opacity: .5; cursor: not-allowed; }
+      .callout { background: #f1f5fb; border-left: 5px solid #006fbf; padding: 13px 17px; margin: 16px 0; }
+      #import-error { background: #fff5f5; border-left: 5px solid #bc3337; padding: 13px 17px; margin: 15px 0; }
+      #import-status { min-height: 1.5em; font-weight: 700; }
+      #question-preview-list { padding-left: 24px; }
+      #question-preview-list li { padding: 5px 0; }
+      [hidden] { display: none !important; }
+      small { display: block; color: #565e63; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p><a href="./index.html">Return to the quiz</a></p>
+      <h1>Import questions from Word</h1>
+      <p>Prepare questions in Microsoft Word, then use this page to generate an updated Brightspace quiz. The Word file stays in your browser; it is not sent to a server.</p>
+      <div class="callout">
+        <strong>Word table format:</strong> Four columns named
+        <strong>Question</strong>, <strong>Instructions</strong>,
+        <strong>Answers</strong>, and <strong>Feedback</strong>.
+        Each question is one row. Put each answer in a separate paragraph in
+        the Answers cell and prefix exactly one with <code>[CORRECT]</code>.
+      </div>
+      <section class="step" aria-labelledby="word-title">
+        <h2 id="word-title">1. Select your Word document</h2>
+        <label for="word-file">Questions (.docx)</label>
+        <input id="word-file" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+        <p id="import-status" role="status" aria-live="polite">Choose a Word document to begin.</p>
+        <p id="import-error" role="alert" hidden></p>
+      </section>
+      <section class="step" aria-labelledby="source-title">
+        <h2 id="source-title">2. Source quiz HTML (optional)</h2>
+        <p>Normally, the importer reads <code>index.html</code> from its own folder. If this is blocked, or you want to preserve a specific edited version, select the current quiz HTML file from Brightspace Manage Files.</p>
+        <label for="quiz-file">Existing quiz HTML</label>
+        <input id="quiz-file" type="file" accept=".html,text/html" />
+        <small>Always use the latest course copy to avoid overwriting someone else's edits.</small>
+      </section>
+      <section id="question-preview" class="step" aria-labelledby="preview-title" hidden>
+        <h2 id="preview-title">3. Validated questions</h2>
+        <ol id="question-preview-list"></ol>
+      </section>
+      <section class="step" aria-labelledby="export-title">
+        <h2 id="export-title">4. Export the updated quiz</h2>
+        <p>Copy just the question table for Brightspace Code View, or download the complete updated <code>index.html</code> to replace the file in Manage Files.</p>
+        <button id="copy-table" type="button" class="secondary" disabled>Copy question table HTML</button>
+        <button id="download-quiz" type="button" disabled>Download updated quiz HTML</button>
+        <small>This page cannot save directly to Brightspace. Back up the current HTML before replacing it, and keep the existing assets and fonts.</small>
+      </section>
+    </main>
+    <script type="module" src="./src/importer-main.ts"></script>
+  </body>
+</html>

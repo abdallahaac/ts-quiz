@@ -4,6 +4,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig(({ mode }) => {
   const components = mode === "components";
+  const importer = mode === "importer";
   return {
     base: "./",
     optimizeDeps: { exclude: ["@brightspace-ui/core", "@brightspace-ui/intl"] },
@@ -14,33 +15,46 @@ export default defineConfig(({ mode }) => {
       copyPublicDir: components,
       lib: {
         entry: resolve(
-          components ? "src/adapters/registerBrightspace.ts" : "src/main.ts",
+          components
+            ? "src/adapters/registerBrightspace.ts"
+            : importer
+              ? "src/importer-main.ts"
+              : "src/main.ts",
         ),
-        name: components ? "BrightspaceComponents" : "BrightspaceQuiz",
+        name: components
+          ? "BrightspaceComponents"
+          : importer
+            ? "BrightspaceWordImporter"
+            : "BrightspaceQuiz",
         formats: ["iife"],
         fileName: () =>
           components
             ? "assets/brightspace-components.js"
-            : "assets/native-quiz.js",
+            : importer
+              ? "assets/docx-importer.js"
+              : "assets/native-quiz.js",
       },
       dynamicImportVarsOptions: { exclude: [] },
       rolldownOptions: { output: { codeSplitting: false } },
       license: {
         fileName: components
           ? "licenses/components.md"
-          : "licenses/application.md",
+          : importer
+            ? "licenses/importer.md"
+            : "licenses/application.md",
       },
       minify: true,
     },
-    plugins: components
+    plugins: components || importer
       ? []
       : [
           {
             name: "brightspace-authoring-page",
             async closeBundle() {
-              const [html, css] = await Promise.all([
+              const [html, css, importerHTML] = await Promise.all([
                 readFile("index.html", "utf8"),
                 readFile("src/styles/quiz.css", "utf8"),
+                readFile("import-questions.html", "utf8"),
               ]);
               const stylesheetLink =
                 '<link rel="stylesheet" href="./src/styles/quiz.css" />';
@@ -72,9 +86,19 @@ export default defineConfig(({ mode }) => {
                   "The production HTML still references development source files.",
                 );
               }
+              const importerEntrypoint =
+                '<script type="module" src="./src/importer-main.ts"></script>';
+              if (!importerHTML.includes(importerEntrypoint)) {
+                throw new Error("The DOCX importer page is missing its development entry point.");
+              }
+              const productionImporter = importerHTML.replace(
+                importerEntrypoint,
+                '<script defer src="./assets/docx-importer.js"></script>',
+              );
               await mkdir("dist/assets", { recursive: true });
               await Promise.all([
                 writeFile("dist/index.html", production),
+                writeFile("dist/import-questions.html", productionImporter),
                 writeFile("dist/assets/quiz.css", assetCSS),
                 copyFile("NOTICE.md", "dist/NOTICE.md"),
               ]);

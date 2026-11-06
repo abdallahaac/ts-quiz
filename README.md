@@ -5,38 +5,55 @@ four-column HTML table in Brightspace Design View. The parser reads that table
 on every page load; there is no compiled question bank or author-facing JSON.
 The existing quiz styling, text, answer behavior and carousel are preserved.
 
-## Import questions from Word (editor mode)
+## Import questions from Word in Brightspace
 
-A DOCX importer is available **inside the existing quiz authoring view** when
-JavaScript is executing. For a local test, change `config.json` to
-`{"editorMode":true}`, run `npm run dev`, and visit
-`http://127.0.0.1:5173/index.html`.
+The Brightspace Design View cannot be relied upon to run custom JavaScript.
+Consequently the authoring interface includes a **static "Import questions from
+Word" link**, visible in Design View even when scripts are disabled. The link
+opens `import-questions.html`, a separate HTML page served from the **same
+Manage Files folder**. This page runs the DOCX parser and can export question
+table HTML or a complete updated quiz file. No Brightspace API credentials are
+needed.
 
-1. Create a .docx Word table with **Question | Instructions | Answers | Feedback**
-   as its header row. Each subsequent row is one question. In the Answers
-   column, place **each answer in its own paragraph**, prefixing exactly one
-   answer with `[CORRECT]`.
-2. Select that file in **Import questions from Word**. The same quiz parser
-   validates the converted HTML before enabling **Replace question rows**.
-3. Apply the import to replace the existing question rows (the original table
-   headings and widths are retained). The resulting table can still be edited.
-4. **Copy table HTML** to carry the changes into the source HTML. Browser edits
-   do not automatically save back to your local `index.html`
-   or to Brightspace Manage Files.
+1. Run `npm run build` and upload the **entire `dist/` contents** to one
+   Manage Files directory: `index.html`, `import-questions.html`,
+   `assets/docx-importer.js`, `assets/native-quiz.js`,
+   `assets/brightspace-components.js`, CSS, fonts, and licenses.
+2. Open the quiz's **Edit HTML / Design View**. Select **Import questions from
+   Word**. If Brightspace rewrites the relative link, use the editor's link
+   picker or Code View to point it to the actual `import-questions.html` URL
+   in that course's Manage Files directory. Use a course-specific link; do not
+   hard-code a sandbox course's address into the reusable source.
+3. In the importer page, choose a `.docx` whose table has these exact headers:
+   **Question | Instructions | Answers | Feedback**. Each row is one question.
+   Put each answer in a separate paragraph; prefix exactly one answer with
+   `[CORRECT]`. Invalid questions are rejected before export.
+4. Choose **Copy question table HTML** to replace the table through Brightspace
+   Code View, **or** choose **Download updated quiz HTML** to create a new
+   `index.html` containing the new questions. By default this downloads the
+   current `./index.html` from the same folder; if blocked, supply a downloaded
+   current copy under **Existing quiz HTML**.
+5. Back up the existing quiz HTML before replacing it in Manage Files and verify
+   the learner view. The importer **does not automatically save** to Brightspace,
+   nor does it upload the DOCX to a server. Brightspace authors must save/publish
+   the updated HTML themselves.
 
-The importer runs locally in the browser without uploading DOCX contents to a
-server, and does not add a runtime npm dependency. It accepts standard OOXML
-DOCX tables; it imports **plain text**, including answer markers, not embedded
-images or complex formatting. Merged cells, nested tables, missing/invalid
-columns, incomplete questions, and duplicate/missing correct markers are rejected.
+### Testing locally
 
-**Brightspace limitation:** The native Brightspace Edit HTML / Design View may
-disable or strip author JavaScript and file-input controls. Therefore this
-progressively enhanced panel is confirmed as an intended **local editor
-simulation**, not a guaranteed working button inside the authenticated
-Brightspace HTML editor. A separate authorized integration would be required if
-the editor suppresses script execution. The deployed quiz still works normally
-without the importer; authored HTML remains the source of truth.
+```sh
+npm ci
+npm run dev
+```
+
+Open `http://127.0.0.1:5173/import-questions.html` directly, or set
+`config.json` to `{"editorMode":true}` and follow the static link from the
+quiz's editor simulation. The production scripts are classic IIFEs; neither
+Brightspace nor the importer needs a Node or Vite runtime after deployment.
+
+The Word parser supports simple OOXML tables and plain-text question paragraphs.
+It intentionally rejects embedded images, merged cells and nested tables. It
+does not preserve Word formatting. The export keeps the existing quiz's
+original scripts, styles, font references and question-table structure.
 
 ## Develop and verify
 
@@ -79,8 +96,10 @@ isolating application changes from component-library version changes.
 
 ```text
 dist/
-  index.html        editable authoring table + inlined CSS
+  index.html        editable authoring table + static Word import link
+  import-questions.html       standalone browser DOCX importer
   assets/
+    docx-importer.js          self-contained classic importer script
     quiz.css                 standalone CSS copy for reuse
     native-quiz.js             classic IIFE; no application runtime dependencies
     brightspace-components.js compiled from @brightspace-ui/core npm imports
