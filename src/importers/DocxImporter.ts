@@ -162,7 +162,8 @@ async function zipDocumentXml(file: File): Promise<string> {
     const start = localOffset + 30 + u16(localOffset + 26) + u16(localOffset + 28);
     if (start + compressedSize > bytes.length)
       throw new Error("The Word document entry is incomplete.");
-    const compressed = bytes.buffer.slice(start, start + compressedSize);
+    const compressed = new ArrayBuffer(compressedSize);
+    new Uint8Array(compressed).set(bytes.subarray(start, start + compressedSize));
     if (method === 0) {
       if (compressedSize !== xmlSize) throw new Error("Invalid DOCX file size.");
       return new TextDecoder().decode(compressed);
