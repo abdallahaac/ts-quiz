@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "build": "npm run typecheck && node scripts/prepare-assets.mjs && vite build --mode components && vite build && node scripts/verify-build.mjs",
+    "build": "npm run typecheck && node scripts/prepare-assets.mjs && vite build --mode components && vite build --mode importer && vite build && node scripts/verify-build.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "check": "npm run typecheck && npm test && npm run build",
     "test:browser": "playwright test",
