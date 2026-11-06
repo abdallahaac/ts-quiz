@@ -723,3 +723,35 @@ details.interaction-instructions-panel {
     animation: none;
   }
 }
+
+/* DOCX importer is injected only when browser scripts run in editor mode. */
+.quiz-docx-import-tools {
+  border: 2px solid var(--activity-border-dark, #cdd5dc);
+  border-left: 5px solid var(--activity-blue, #006fbf);
+  border-radius: 6px;
+  background: #f1f5fb;
+  padding: 16px;
+  margin: 16px 0;
+}
+.quiz-docx-import-tools h2 {
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+.quiz-docx-import-tools label {
+  display: grid;
+  gap: 8px;
+  font-weight: 700;
+}
+.quiz-docx-import-tools input[type="file"] {
+  max-width: 100%;
+  font: inherit;
+}
+.quiz-docx-import-status {
+  overflow-wrap: anywhere;
+  margin-top: 12px;
+}
+.quiz-docx-import-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}

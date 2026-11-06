@@ -5,6 +5,39 @@ four-column HTML table in Brightspace Design View. The parser reads that table
 on every page load; there is no compiled question bank or author-facing JSON.
 The existing quiz styling, text, answer behavior and carousel are preserved.
 
+## Import questions from Word (editor mode)
+
+A DOCX importer is available **inside the existing quiz authoring view** when
+JavaScript is executing. For a local test, change `config.json` to
+`{"editorMode":true}`, run `npm run dev`, and visit
+`http://127.0.0.1:5173/brightspace-quiz.html`.
+
+1. Create a .docx Word table with **Question | Instructions | Answers | Feedback**
+   as its header row. Each subsequent row is one question. In the Answers
+   column, place **each answer in its own paragraph**, prefixing exactly one
+   answer with `[CORRECT]`.
+2. Select that file in **Import questions from Word**. The same quiz parser
+   validates the converted HTML before enabling **Replace question rows**.
+3. Apply the import to replace the existing question rows (the original table
+   headings and widths are retained). The resulting table can still be edited.
+4. **Copy table HTML** to carry the changes into the source HTML. Browser edits
+   do not automatically save back to your local `brightspace-quiz.html`
+   or to Brightspace Manage Files.
+
+The importer runs locally in the browser without uploading DOCX contents to a
+server, and does not add a runtime npm dependency. It accepts standard OOXML
+DOCX tables; it imports **plain text**, including answer markers, not embedded
+images or complex formatting. Merged cells, nested tables, missing/invalid
+columns, incomplete questions, and duplicate/missing correct markers are rejected.
+
+**Brightspace limitation:** The native Brightspace Edit HTML / Design View may
+disable or strip author JavaScript and file-input controls. Therefore this
+progressively enhanced panel is confirmed as an intended **local editor
+simulation**, not a guaranteed working button inside the authenticated
+Brightspace HTML editor. A separate authorized integration would be required if
+the editor suppresses script execution. The deployed quiz still works normally
+without the importer; authored HTML remains the source of truth.
+
 ## Develop and verify
 
 Use Node 24 LTS (minimum 22.12) and npm.
