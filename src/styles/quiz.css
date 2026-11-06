@@ -624,6 +624,7 @@ details.interaction-instructions-panel {
 .quiz-page
   :is(
     .quiz-editor-guide,
+    .quiz-docx-import-link,
     .quiz-edit-instructions,
     [data-quiz-global-instructions],
     #quiz-authoring-source,
@@ -685,6 +686,7 @@ details.interaction-instructions-panel {
   .quiz-page
   :is(
     .quiz-editor-guide,
+    .quiz-docx-import-link,
     .quiz-edit-instructions,
     [data-quiz-global-instructions],
     #quiz-authoring-source,
@@ -755,3 +757,12 @@ details.interaction-instructions-panel {
   gap: 12px;
   flex-wrap: wrap;
 }
+
+/* Static authoring link: usable when Brightspace Design View does not run JS. */
+.quiz-docx-import-link {
+  border-left: 5px solid var(--activity-blue, #006fbf);
+  background: #f1f5fb;
+  padding: 16px;
+  margin: 16px 0;
+}
+.quiz-docx-import-link p:last-child { margin-bottom: 0; }
