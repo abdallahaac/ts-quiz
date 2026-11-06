@@ -1,4 +1,5 @@
 import type { AnswerStrategy, Evaluation, Question } from "../domain/models";
+
 export class MultipleChoiceStrategy implements AnswerStrategy {
   evaluate(question: Question, selected: number): Evaluation {
     const answer = question.answers[selected];

@@ -13,7 +13,7 @@ test.beforeEach(async ({ page }) => {
     route.fulfill({ contentType: "text/css", body: "" }),
   );
 });
-async function ready(page: Page, name = "brightspace-quiz.html") {
+async function ready(page: Page, name = "index.html") {
   await page.goto(name);
   await expect(page.locator("#quiz-learner-root")).toHaveAttribute(
     "data-quiz-ready",
@@ -82,7 +82,7 @@ test("native fallback supports keyboard answers, grading and reset", async ({
 test("author edits are parsed from HTML without a rebuild", async ({
   page,
 }) => {
-  await page.route("**/brightspace-quiz.html", async (route) => {
+  await page.route("**/index.html", async (route) => {
     const response = await route.fetch();
     const body = (await response.text()).replace(
       "Which action makes a link’s purpose easier to understand?",
@@ -103,7 +103,7 @@ test("author edits are parsed from HTML without a rebuild", async ({
 test("editor retains a visible editable table without learner controls", async ({
   page,
 }) => {
-  await page.route("**/brightspace-quiz.html", async (route) => {
+  await page.route("**/index.html", async (route) => {
     const response = await route.fetch();
     await route.fulfill({
       response,
@@ -113,7 +113,7 @@ test("editor retains a visible editable table without learner controls", async (
       ),
     });
   });
-  await page.goto("brightspace-quiz.html");
+  await page.goto("index.html");
   await expect(page.locator(".quiz-question-table")).toBeVisible();
   await expect(page.locator(".quiz-editor-guide")).toBeVisible();
   await expect(page.locator("#quiz-learner-root")).toBeHidden();

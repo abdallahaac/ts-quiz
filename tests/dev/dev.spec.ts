@@ -18,7 +18,7 @@ test("Vite serves npm components, lazy dictionaries, and local Lato assets", asy
     )
       missing.push(response.url());
   });
-  await page.goto("brightspace-quiz.html");
+  await page.goto("index.html");
   await expect(page.locator("d2l-button[data-check]")).toBeVisible();
   await page.getByRole("radio").nth(1).check();
   await page.getByRole("button", { name: "Check", exact: true }).click();

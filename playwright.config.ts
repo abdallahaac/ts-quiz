@@ -14,7 +14,7 @@ export default defineConfig({
   ],
   webServer: {
     command: "node scripts/test-server.mjs",
-    url: "http://127.0.0.1:4173/content/enforced/test-course/quiz/brightspace-quiz.html",
+    url: "http://127.0.0.1:4173/content/enforced/test-course/quiz/index.html",
     reuseExistingServer: false,
   },
 });

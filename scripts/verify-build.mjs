@@ -3,10 +3,10 @@ import { readFile, access, readdir } from "node:fs/promises";
 import { Script } from "node:vm";
 const read = (path) => readFile(path, "utf8");
 const [html, app, components, source] = await Promise.all([
-  read("dist/brightspace-quiz.html"),
+  read("dist/index.html"),
   read("dist/assets/native-quiz.js"),
   read("dist/assets/brightspace-components.js"),
-  read("brightspace-quiz.html"),
+  read("index.html"),
 ]);
 // Both outputs must parse as classic scripts with no runtime module imports.
 new Script(app);

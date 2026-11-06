@@ -14,7 +14,7 @@ npm ci
 npm run dev
 ```
 
-Open the URL printed by Vite followed by `/brightspace-quiz.html`. This page uses
+Open the URL printed by Vite followed by `/index.html`. This page uses
 ES modules from `src/`, direct npm imports from `@brightspace-ui/core`, and local Lato assets.
 
 ```sh
@@ -40,13 +40,13 @@ isolating application changes from component-library version changes.
 1. Run `npm run build`.
 2. Upload **the contents of `dist/` together** into one folder in Manage Files.
    Retain the `assets/`, `fonts/`, and `licenses/` subfolders.
-3. Create a content topic linking to `brightspace-quiz.html` in that folder.
+3. Create a content topic linking to `index.html` in that folder.
 4. Open Edit HTML / Design View, change a question in the table, then Save and
    Close. Reopen the learner topic to use the saved content.
 
 ```text
 dist/
-  brightspace-quiz.html        editable authoring table + inlined CSS
+  index.html        editable authoring table + inlined CSS
   assets/
     native-quiz.js             classic IIFE; no application runtime dependencies
     brightspace-components.js compiled from @brightspace-ui/core npm imports
@@ -84,7 +84,7 @@ navigate freely; their answers and feedback persist between slides. Check locks
 the current answer; Try Again resets that question. Nothing is sent to a gradebook.
 
 Course authors need no Node, TypeScript, or rebuild to edit questions in the
-**deployed HTML**. Developers should edit the root `brightspace-quiz.html` when
+**deployed HTML**. Developers should edit the root `index.html` when
 changing the local question bank. Before redeploying code to a course with edited
 questions, download its current HTML and carry its authored table into the local
 HTML: a build regenerates `dist/` from local source, not from the live course.
@@ -92,7 +92,7 @@ HTML: a build regenerates `dist/` from local source, not from the live course.
 ## Project structure
 
 ```text
-brightspace-quiz.html          authorable source page / Vite development entry
+index.html          authorable source page / Vite development entry
 brightspace-core-bundle.js    original supplied artifact, unused by the project
 src/
   main.ts                     browser bootstrap, HMR and back/forward restoration

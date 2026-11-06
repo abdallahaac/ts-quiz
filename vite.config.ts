@@ -39,7 +39,7 @@ export default defineConfig(({ mode }) => {
             name: "brightspace-authoring-page",
             async closeBundle() {
               const [html, css] = await Promise.all([
-                readFile("brightspace-quiz.html", "utf8"),
+                readFile("index.html", "utf8"),
                 readFile("src/styles/quiz.css", "utf8"),
               ]);
               const production = html
@@ -55,7 +55,7 @@ export default defineConfig(({ mode }) => {
                   '<script type="module" src="./src/main.ts"></script>',
                   '<script defer data-quiz-runtime src="./assets/native-quiz.js"></script>',
                 );
-              await writeFile("dist/brightspace-quiz.html", production);
+              await writeFile("dist/index.html", production);
               await copyFile("NOTICE.md", "dist/NOTICE.md");
             },
           },
